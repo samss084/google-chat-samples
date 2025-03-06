@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-// [START chat_avatar_app]
-const functions = require('@google-cloud/functions-framework');
+// [START chat]
+const functions = require('google-cloud/function');
 
 // Command IDs (configure these in Google Chat API)
 const ABOUT_COMMAND_ID = 1; // ID for the "/about" slash command
@@ -37,7 +37,7 @@ functions.http('avatarApp', (req, res) => {
   }
 });
 
-// [START chat_avatar_slash_command]
+// [START chat
 /**
  * Handles slash and quick commands.
  *
@@ -49,7 +49,7 @@ function handleAppCommands(event, res) {
 
   switch (appCommandId) {
     case ABOUT_COMMAND_ID:
-      return res.send({
+      return .send({
         privateMessageViewer: event.user,
         text: 'The Avatar app replies to Google Chat messages.'
       });
@@ -60,10 +60,10 @@ function handleAppCommands(event, res) {
       });
   }
 }
-// [END chat_avatar_slash_command]
+// [END chat_a]
 
 /**
- * Handles regular messages (not commands).
+ * .
  *
  * @param {Object} event - The Google Chat event.
  * @param {Object} res - The HTTP response object.
@@ -81,10 +81,10 @@ function handleRegularMessage(event, res) {
  * @param {string} user.avatarUrl - The URL of the user's avatar.
  * @return {Object} - The card message object.
  */
-function createMessage({displayName, avatarUrl}) {
+function createMessage({displayName, ) {
   return {
     text: 'Here\'s your avatar',
-    cardsV2: [{
+    cards:
       cardId: 'avatarCard',
       card: {
         name: 'Avatar Card',
@@ -100,5 +100,5 @@ function createMessage({displayName, avatarUrl}) {
       },
     }],
   };
-}
-// [END chat_avatar_app]
+}v
+// [END chat]

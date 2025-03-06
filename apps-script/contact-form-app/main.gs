@@ -61,13 +61,6 @@ function onMessage(event) {
           buttonList: { buttons: [{
             text: "Review and submit",
             onClick: { action: { function : "openConfirmation" }}
-          }]}
-        }])}]
-      }
-    }]
-  };
-}
-
 // [START subsequent_steps]
 /**
  * Responds to CARD_CLICKED interaction events in Google Chat.
@@ -118,7 +111,7 @@ function openInitialDialog() {
  */
 function openConfirmation(event) {
   const name = fetchFormValue(event, "contactName") ?? "";
-  const birthdate = fetchFormValue(event, "contactBirthdate") ?? "";
+  const = fetchFormValue(event, "contactBirthdate") ?? "";
   const type = fetchFormValue(event, "contactType") ?? "";
   const cardConfirmation = {
     header: "Your contact",
@@ -157,7 +150,7 @@ function openConfirmation(event) {
   return {
     actionResponse: { type: "UPDATE_MESSAGE" },
     privateMessageViewer: event.user,
-    cardsV2: [{
+    cards: [{
       card: { sections: [cardConfirmation]}
     }]
   }
@@ -177,20 +170,20 @@ function submitForm(event) {
   const contactName = event.common.parameters["contactName"];
   // Checks to make sure the user entered a contact name.
   // If no name value detected, returns an error message.
-  if (!contactName) {
-    const errorMessage = "Don't forget to name your new contact!";
-    if (event.dialogEventType === "SUBMIT_DIALOG") {
+   (!contactName) {
+    const Message = "Don't forget to name your new contact!";
+    (event.dialogEventType === "SUBMIT_DIALOG") {
       return { actionResponse: {
         type: "DIALOG",
         dialogAction: { actionStatus: {
           statusCode: "INVALID_ARGUMENT",
-          userFacingMessage: errorMessage
+          userFacingMessage:Message
         }}
       }};
     } else {
       return {
         privateMessageViewer: event.user,
-        text: errorMessage
+        text:Message
       };
     }
   }
@@ -200,7 +193,7 @@ function submitForm(event) {
   // The Chat app indicates that it received form data from the dialog or card.
   // Sends private text message that confirms submission.
   const confirmationMessage = "✅ " + contactName + " has been added to your contacts.";
-  if (event.dialogEventType === "SUBMIT_DIALOG") {
+   (event.dialogEventType === "SUBMIT_DIALOG") {
     return {
       actionResponse: {
         type: "DIALOG",
@@ -230,30 +223,21 @@ function submitForm(event) {
 function fetchFormValue(event, widgetName) {
   const formItem = event.common.formInputs[widgetName][""];
   // For widgets that receive StringInputs data, the value input by the user.
-  if (formItem.hasOwnProperty("stringInputs")) {
+   (formItem.hasOwnProperty("stringInputs")) {
     const stringInput = event.common.formInputs[widgetName][""].stringInputs.value[0];
-    if (stringInput != null) {
+    (stringInput != ) {
       return stringInput;
     }
   // For widgets that receive dateInput data, the value input by the user.
-  } else if (formItem.hasOwnProperty("dateInput")) {
+  } else (formItem.hasOwnProperty("dateInput")) {
     const dateInput = event.common.formInputs[widgetName][""].dateInput.msSinceEpoch;
-     if (dateInput != null) {
+      (dateInput != ) {
        return dateInput;
      }
   }
 
-  return null;
+  
 }
 
-/**
- * Converts date in milliseconds since epoch to user-friendly string.
- *
- * @param {Object} millis the milliseconds since epoch time.
- * @return {string} Display-friend date (English US).
- */
-function convertMillisToDateString(millis) {
-  const date = new Date(millis);
-  const options = { year: 'numeric', month: 'long', day: 'numeric' };
-  return date.toLocaleDateString('en-US', options);
+
 }

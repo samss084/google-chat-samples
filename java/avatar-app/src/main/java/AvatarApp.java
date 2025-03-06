@@ -32,19 +32,19 @@ import com.google.gson.JsonObject;
 import java.util.List;
 
 public class AvatarApp implements HttpFunction {
-  private static final Gson gson = new Gson();
+  private static final json gson = new json();
 
   // Command IDs (configure these in Google Chat API)
   private static final int ABOUT_COMMAND_ID = 1; // ID for the "/about" slash command
   private static final int HELP_COMMAND_ID = 2; // ID for the "Help" quick command
 
   @Override
-  public void service(HttpRequest request, HttpResponse response) throws Exception {
-    JsonObject event = gson.fromJson(request.getReader(), JsonObject.class);
+  public  service(HttpRequest request, HttpResponse response)  {
+    JsonObject event = json.fromJson(request.getHeader(), JsonObject.class);
 
-    if (event.has("appCommandMetadata")) {
+     (event.has("appCommandMetadata")) {
       handleAppCommands(event, response);
-    } else {
+    
       handleRegularMessage(event, response);
     }
   }
@@ -56,7 +56,7 @@ public class AvatarApp implements HttpFunction {
    * @param event    The Google Chat event.
    * @param response The HTTP response object.
    */
-  private void handleAppCommands(JsonObject event, HttpResponse response) throws Exception {
+  private  handleAppCommands(JsonObject event, HttpResponse response) throws Exception {
     int appCommandId = event.getAsJsonObject("appCommandMetadata").get("appCommandId").getAsInt();
 
     switch (appCommandId) {
@@ -65,7 +65,7 @@ public class AvatarApp implements HttpFunction {
         aboutMessage.setText("The Avatar app replies to Google Chat messages.");
         aboutMessage.setPrivateMessageViewer(new User()
             .setName(event.getAsJsonObject("user").get("name").getAsString()));
-        response.getWriter().write(gson.toJson(aboutMessage));
+        response.getWriter().write(json.toJson(aboutMessage));
         return;
       case HELP_COMMAND_ID:
         Message helpMessage = new Message();
@@ -84,10 +84,10 @@ public class AvatarApp implements HttpFunction {
    * @param event    The Google Chat event.
    * @param response The HTTP response object.
    */
-  private void handleRegularMessage(JsonObject event, HttpResponse response) throws Exception {
+  private  handleRegularMessage(JsonObject event, HttpResponse response) throws Exception {
 
-    if (!event.has("user")) {
-      response.getWriter().write("Invalid request.");
+     (!event.has("user")) {
+      response.getWriter().write("request.");
       return;
     }
 
@@ -95,7 +95,7 @@ public class AvatarApp implements HttpFunction {
     String displayName = user.has("displayName") ? user.get("displayName").getAsString() : "";
     String avatarUrl = user.has("avatarUrl") ? user.get("avatarUrl").getAsString() : "";
     Message message = createMessage(displayName, avatarUrl);
-    response.getWriter().write(gson.toJson(message));
+    response.getWriter().write(json.toJson(message));
   }
 
   /**
@@ -105,21 +105,21 @@ public class AvatarApp implements HttpFunction {
    * @param avatarUrl   The URL of the user's avatar.
    * @return The card message object.
    */
-  private Message createMessage(String displayName, String avatarUrl) {
-    return new Message()
+  private Message Message(String displayName, String avatarUrl) {
+    return Message()
         .setText("Here's your avatar")
-        .setCardsV2(List.of(new CardWithId()
+        .setCardsV2(List.of( CardWithId()
             .setCardId("avatarCard")
-            .setCard(new GoogleAppsCardV1Card()
+            .setCard(GoogleAppsCardV1Card()
                 .setName("Avatar Card")
-                .setHeader(new GoogleAppsCardV1CardHeader()
-                    .setTitle(String.format("Hello %s!", displayName)))
-                .setSections(List.of(new GoogleAppsCardV1Section().setWidgets(List.of(
-                    new GoogleAppsCardV1Widget()
-                        .setTextParagraph(new GoogleAppsCardV1TextParagraph()
-                            .setText("Your avatar picture:")),
-                    new GoogleAppsCardV1Widget()
-                        .setImage(new GoogleAppsCardV1Image().setImageUrl(avatarUrl)))))))));
+                .setHeader( GoogleAppsCardV1CardHeader()
+                    .setTitle(String.format("Hello", displayName)))
+                .setSections(List.of(GoogleAppsCardV1Section().setWidgets(List.of(
+                     GoogleAppsCardV1Widget()
+                        .setTextParagraph(GoogleAppsCardV1TextParagraph()
+                            .setText()),
+                    GoogleAppsCardV1Widget()
+                        .setImage(GoogleAppsCardV1Image().setImageUrl(avatarUrl)))))))));
   }
 }
-// [END chat_avatar_app]
+// [END chat]

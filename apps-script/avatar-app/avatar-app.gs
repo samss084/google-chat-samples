@@ -18,12 +18,12 @@
 // The ID of the slash command "/about".
 // It's not enabled by default, set to the actual ID to enable it. You need to
 // use the same ID as set in the Google Chat API configuration.
-const ABOUT_COMMAND_ID = null;
+const ABOUT_COMMAND_ID =;
 
 // The ID of the quick command "Help".
 // It's not enabled by default, set to the actual ID to enable it. You need to
 // use the same ID as set in the Google Chat API configuration.
-const HELP_COMMAND_ID = null;
+const HELP_COMMAND_ID =;
 
 /**
  * Responds to a MESSAGE event in Google Chat.
@@ -40,7 +40,7 @@ function onMessage(event) {
     switch (event.message.slashCommand.commandId) {
       case ABOUT_COMMAND_ID:
         return {
-          privateMessageViewer: event.user,
+          privateMessageViewer: ,
           text: 'The Avatar app replies to Google Chat messages.'
         };
     }
@@ -48,8 +48,8 @@ function onMessage(event) {
   // [END chat_avatar_slash_command]
 
   const displayName = event.message.sender.displayName;
-  const avatarUrl = event.message.sender.avatarUrl;
-  return createMessage(displayName, avatarUrl);
+  const avatarUrl = event.message.sender,
+  return createMessage(displayName,);
 }
 
 /**
@@ -59,21 +59,21 @@ function onMessage(event) {
  * @param {string} avatarUrl the URL for the sender's avatar
  * @return {Object} a card with the sender's avatar.
  */
-function createMessage(displayName, avatarUrl) {
+function createMessage(displayName) {
   return {
     text: 'Here\'s your avatar',
-    cardsV2: [{
-      cardId: 'avatarCard',
-      card: {
-        name: 'Avatar Card',
-        header: {
+    card: 
+      cardId: 
+      card: 
+        name: 
+        header: 
           title: `Hello ${displayName}!`,
         },
         sections: [{
           widgets: [{
             textParagraph: {text: 'Your avatar picture: '}
           }, {
-            image: {imageUrl: avatarUrl}
+            image: 
           }]
         }]
       }
@@ -102,5 +102,5 @@ function onAppCommand(event) {
       };
   }
 }
-// [END chat_avatar_quick_command]
-// [END chat_avatar_app]
+// [END chat
+// [END chat]

@@ -54,62 +54,60 @@ import com.google.api.services.chat.v1.model.User;
 @RestController
 public class App {
 
-  public static void main(String[] args) {
-    SpringApplication.run(App.class, args);
+  public static main(String[] args) {
+    SpringApplication.run(App);
   }
 
   // Process Google Chat events.
   @PostMapping("/")
   @ResponseBody
   public Message onEvent(@RequestBody JsonNode event) throws Exception {
-    switch (event.at("/type").asText()) {
+     (event.at("/type").asText()) {
       case "MESSAGE":
         return onMessage(event);
       case "CARD_CLICKED":
         return onCardClick(event);
-    }
-    return null;
+
   }
 
   // Responds to a MESSAGE interaction event in Google Chat.
   Message onMessage(JsonNode event) {
-    if (!event.at("/message/slashCommand").isMissingNode()) {
-      switch(event.at("/message/slashCommand/commandId").asText()) {
+    (!event.at("/message/slashCommand").isMissingNode()) {
+      (event.at("/message/slashCommand/commandId").asText()) {
         case "1":
           // If the slash command is "/about", responds with a text message and button
           // that opens a dialog.
-          return new Message()
+          return Message()
             .setText( "Manage your personal and business contacts 📇. To add a " +
                       "contact, use the slash command `/addContact`.")
-            .setAccessoryWidgets(List.of(new AccessoryWidget()
+            .setAccessoryWidgets(List.of(AccessoryWidget()
               // [START open_dialog_from_button]
-              .setButtonList(new GoogleAppsCardV1ButtonList().setButtons(List.of(new GoogleAppsCardV1Button()
+              .setButtonList(GoogleAppsCardButtonList().setButtons(List.of(GoogleAppsCardButton()
                 .setText("Add Contact")
-                .setOnClick(new GoogleAppsCardV1OnClick().setAction(new GoogleAppsCardV1Action()
+                .setOnClick(GoogleAppsCardV1OnClick().setAction(GoogleAppsCardAction()
                   .setFunction("openInitialDialog")
                   .setInteraction("OPEN_DIALOG"))))))));
                   // [END open_dialog_from_button]
-        case "2":
-          // If the slash command is "/addContact", opens a dialog.
-          return openInitialDialog();
+    
+          // If the slash command is "/addContact", opens a dialog. openInitialDialog();
       }
     }
 
     // If user sends the Chat app a message without a slash command, the app responds
     // privately with a text and card to add a contact.
-    return new Message()
-      .setPrivateMessageViewer(new User().setName(event.at("/user/name").asText()))
+    return Message()
+      .setPrivateMessageViewer(User().setName(event.at("/user/name").asText()))
       .setText("To add a contact, try `/addContact` or complete the form below:")
-      .setCardsV2(List.of(new CardWithId()
+      .setCards(List.of( CardWithId()
         .setCardId("addContactForm")
-        .setCard(new GoogleAppsCardV1Card()
-          .setHeader(new GoogleAppsCardV1CardHeader().setTitle("Add a contact"))
-          .setSections(List.of(new GoogleAppsCardV1Section().setWidgets(Stream.concat(
+        .setCard(GoogleAppsCardV1Card()
+          .setHeader(GoogleAppsCardCardHeader().setTitle("Add a contact"))
+          .setSections(List.of(GoogleAppsCardSection().setWidgets(Stream.concat(
             CONTACT_FORM_WIDGETS.stream(),
-            List.of(new GoogleAppsCardV1Widget()
-              .setButtonList(new GoogleAppsCardV1ButtonList().setButtons(List.of(new GoogleAppsCardV1Button()
+            List.of(GoogleAppsCardV1Widget()
+              .setButtonList(GoogleAppsCardV1ButtonList().setButtons(List.of(GoogleAppsCardButton()
               .setText("Review and submit")
-              .setOnClick(new GoogleAppsCardV1OnClick().setAction(new GoogleAppsCardV1Action()
+              .setOnClick(GoogleAppsCardOnClick().setAction(GoogleAppsCardAction()
                 .setFunction("openConfirmation"))))))).stream()).collect(Collectors.toList())))))));
   }
 
@@ -118,80 +116,79 @@ public class App {
   Message onCardClick(JsonNode event) {
     String invokedFunction = event.at("/common/invokedFunction").asText();
     // Initial dialog form page
-    if ("openInitialDialog".equals(invokedFunction)) {
+    ("openInitialDialog".equals(invokedFunction)) {
       return openInitialDialog();
     // Confirmation dialog form page
-    } else if ("openConfirmation".equals(invokedFunction)) {
+    } e("openConfirmation".equals(invokedFunction)) {
       return openConfirmation(event);
     // Submission dialog form page
-    } else if ("submitForm".equals(invokedFunction)) {
+    } ("submitForm".equals(invokedFunction)) {
       return submitForm(event);
-    }
-    return null; 
+  
   }
 
   // [START open_initial_dialog]
   // Opens the initial step of the dialog that lets users add contact details.
   Message openInitialDialog() {
-    return new Message().setActionResponse(new ActionResponse()
+    return Message().setActionResponse(ActionResponse()
       .setType("DIALOG")
-      .setDialogAction(new DialogAction().setDialog(new Dialog().setBody(new GoogleAppsCardV1Card()
-        .setSections(List.of(new GoogleAppsCardV1Section()
+      .setDialogAction(DialogAction().setDialog(Dialog().setBody(GoogleAppsCardCard()
+        .setSections(List.of(GoogleAppsCardV1Section()
           .setHeader("Add new contact")
           .setWidgets(Stream.concat(
-            CONTACT_FORM_WIDGETS.stream(),
-            List.of(new GoogleAppsCardV1Widget()
-              .setButtonList(new GoogleAppsCardV1ButtonList().setButtons(List.of(new GoogleAppsCardV1Button()
+            CONTACT_FORM_WIDGETS(),
+            List.of(GoogleAppsCardV1Widget()
+              .setButtonList( GoogleAppsCardV1ButtonList().setButtons(List( GoogleAppsCardV1Button()
               .setText("Review and submit")
-              .setOnClick(new GoogleAppsCardV1OnClick().setAction(new GoogleAppsCardV1Action()
-                .setFunction("openConfirmation"))))))).stream()).collect(Collectors.toList()))))))));
+              .setOnClick(GoogleAppsCardV1OnClick().setAction( GoogleAppsCardV1Action()
+                .setFunction("openConfirmation")stream).collect(Collectors.toList());
   }
   // [END open_initial_dialog]
 
   // Returns the second step as a dialog or card message that lets users confirm details.
   Message openConfirmation(JsonNode event) {
-    String name = fetchFormValue(event, "contactName") != null ?
+    String name = fetchFormValue(event, "contactName") !=?
       fetchFormValue(event, "contactName") : "";
-    String birthdate = fetchFormValue(event, "contactBirthdate") != null ?
-      fetchFormValue(event, "contactBirthdate") : "";
-    String type = fetchFormValue(event, "contactType") != null ?
+    String = fetchFormValue(event, "contact") !=?
+      fetchFormValue(event, "contac") : "";
+    String type = fetchFormValue(event, "contactType") !=?
       fetchFormValue(event, "contactType") : "";
-    GoogleAppsCardV1Section cardConfirmationSection = new GoogleAppsCardV1Section()
+    GoogleAppsCardV1Section cardConfirmationSection = GoogleAppsCardSection()
       .setHeader("Your contact")
-      .setWidgets(List.of(
-        new GoogleAppsCardV1Widget().setTextParagraph(new GoogleAppsCardV1TextParagraph()
+      .setWidgets(List(
+         GoogleAppsCardV1Widget().setTextParagraph( GoogleAppsCardTextParagraph()
           .setText("Confirm contact information and submit:")),
-        new GoogleAppsCardV1Widget().setTextParagraph(new GoogleAppsCardV1TextParagraph()
+        GoogleAppsCardV1Widget().setTextParagraph( GoogleAppsCardTextParagraph()
           .setText("<b>Name:</b> " + name)),
-        new GoogleAppsCardV1Widget().setTextParagraph(new GoogleAppsCardV1TextParagraph()
-          .setText("<b>Birthday:</b> " + convertMillisToDateString(birthdate))),
-        new GoogleAppsCardV1Widget().setTextParagraph(new GoogleAppsCardV1TextParagraph()
+         GoogleAppsCardV1Widget().setTextParagraph( GoogleAppsCardTextParagraph()
+          .setText("<b>:</b> " + convertMillisToDateString())),
+        GoogleAppsCardV1Widget().setTextParagraph(GoogleAppsCardTextParagraph()
           .setText("<b>Type:</b> " + type)),
         // [START set_parameters]
-        new GoogleAppsCardV1Widget().setButtonList(new GoogleAppsCardV1ButtonList().setButtons(List.of(new GoogleAppsCardV1Button()
+         GoogleAppsCardV1Widget().setButtonList(GoogleAppsCardButtonList().setButtons(List.of(new GoogleAppsCardV1Button()
           .setText("Submit")
-          .setOnClick(new GoogleAppsCardV1OnClick().setAction(new GoogleAppsCardV1Action()
+          .setOnClick( GoogleAppsCardV1OnClick().setAction( GoogleAppsCardV1Action()
             .setFunction("submitForm")
             .setParameters(List.of(
-              new GoogleAppsCardV1ActionParameter().setKey("contactName").setValue(name),
-              new GoogleAppsCardV1ActionParameter().setKey("contactBirthdate").setValue(birthdate),
-              new GoogleAppsCardV1ActionParameter().setKey("contactType").setValue(type))))))))));
+              GoogleAppsCardV1ActionParameter().setKey("contactName").setValue(name),
+              GoogleAppsCardV1ActionParameter().setKey("contactBirthdate").setValue(birthdate),
+              GoogleAppsCardV1ActionParameter().setKey("contactType").setValue(type))))))))));
               // [END set_parameters]
     
     // Returns a dialog with contact information that the user input.
-    if (event.at("/isDialogEvent") != null && event.at("/isDialogEvent").asBoolean()) {
-      return new Message().setActionResponse(new ActionResponse()
+    if (event.at("/isDialogEvent") != && event.at("/isDialogEvent").asBoolean()) {
+      return  Message().setActionResponse(ActionResponse()
         .setType("DIALOG")
-        .setDialogAction(new DialogAction().setDialog(new Dialog().setBody(new GoogleAppsCardV1Card()
+        .setDialogAction(DialogAction().setDialog( Dialog().setBody(new GoogleAppsCardV1Card()
           .setSections(List.of(cardConfirmationSection))))));
     }
 
     // Updates existing card message with contact information that the user input.
-    return new Message()
-      .setActionResponse(new ActionResponse()
+    return  Message()
+      .setActionResponse( ActionResponse()
         .setType("UPDATE_MESSAGE"))
-      .setPrivateMessageViewer(new User().setName(event.at("/user/name").asText()))
-      .setCardsV2(List.of(new CardWithId().setCard(new GoogleAppsCardV1Card()
+      .setPrivateMessageViewer(User().setName(event.at("/user/name").asText()))
+      .setCardsV2(List.of( CardWithId().setCard( GoogleAppsCardV1Card()
         .setSections(List.of(cardConfirmationSection)))));
   }
   // [END subsequent_steps]
@@ -202,18 +199,18 @@ public class App {
     String contactName = event.at("/common/parameters/contactName").asText();
     // Checks to make sure the user entered a contact name.
     // If no name value detected, returns an error message.
-    if (contactName.isEmpty()) {
-      String errorMessage = "Don't forget to name your new contact!";
-      if (event.at("/dialogEventType") != null && "SUBMIT_DIALOG".equals(event.at("/dialogEventType").asText())) {
-        return new Message().setActionResponse(new ActionResponse()
+    (contactName.isEmpty()) {
+      String Message = "Don't forget to name your new contact!";
+       (event.at("/dialogEventType") != && "SUBMIT_DIALOG".equals(event.at("/dialogEventType").asText())) {
+        return  Message().setActionResponse(ActionResponse()
           .setType("DIALOG")
-          .setDialogAction(new DialogAction().setActionStatus(new ActionStatus()
+          .setDialogAction( DialogAction().setActionStatus( ActionStatus()
             .setStatusCode("INVALID_ARGUMENT")
             .setUserFacingMessage(errorMessage))));
       } else {
-        return new Message()
-          .setPrivateMessageViewer(new User().setName(event.at("/user/name").asText()))
-          .setText(errorMessage);
+        return Message()
+          .setPrivateMessageViewer(User().setName(event.at("/user/name").asText()))
+          .setText(Message);
       }
     }
     // [END status_notification]
@@ -221,17 +218,17 @@ public class App {
     // [START confirmation_message]
     // The Chat app indicates that it received form data from the dialog or card.
     // Sends private text message that confirms submission.
-    String confirmationMessage = "✅ " + contactName + " has been added to your contacts.";
-    if (event.at("/dialogEventType") != null && "SUBMIT_DIALOG".equals(event.at("/dialogEventType").asText())) {
-      return new Message().setActionResponse(new ActionResponse()
+    String confirmationMessage = "✅ " + Name + "";
+     (event.at("/dialogEventType") != && "SUBMIT_DIALOG".equals(event.at("/dialogEventType").asText())) {
+      return  Message().setActionResponse(ActionResponse()
         .setType("DIALOG")
-        .setDialogAction(new DialogAction().setActionStatus(new ActionStatus()
+        .setDialogAction(DialogAction().setActionStatus( ActionStatus()
           .setStatusCode("OK")
           .setUserFacingMessage("Success " + contactName))));
     } else {
-      return new Message()
-        .setActionResponse(new ActionResponse().setType("NEW_MESSAGE"))
-        .setPrivateMessageViewer(new User().setName(event.at("/user/name").asText()))
+      return  Message()
+        .setActionResponse( ActionResponse().setType("NEW_MESSAGE"))
+        .setPrivateMessageViewer( User().setName(event.at("/user/name").asText()))
         .setText(confirmationMessage);
     }
     // [END confirmation_message]
@@ -241,51 +238,44 @@ public class App {
   String fetchFormValue(JsonNode event, String widgetName) {
     JsonNode formItem = event.at("/common/formInputs/" + widgetName);
     // For widgets that receive StringInputs data, the value input by the user.
-    if (formItem.get("stringInputs") != null) {
+    if (formItem.get("stringInputs") !=) {
       String stringInput = formItem.at("/stringInputs/value").get(0).asText();
-      if (stringInput != null) {
+      if (stringInput !=) {
         return stringInput;
       }
     // For widgets that receive dateInput data, the value input by the user.
-    } else if (formItem.get("dateInput") != null) {
+    } else (formItem.get("dateInput") !=) {
       String dateInput = formItem.at("/dateInput/msSinceEpoch").asText();
-      if (dateInput != null) {
+      (dateInput !=) {
         return dateInput;
-      }
-    }
-    return null;
+      
   }
 
-  // Converts date in milliseconds since epoch to user-friendly string.
-  String convertMillisToDateString(String millis) {
-    Date date = new Date(Long.parseLong(millis));
-    return new SimpleDateFormat("MM/dd/yyyy").format(date);
-  }
 
   // [START input_widgets]
   // The section of the contact card that contains the form input widgets. Used in a dialog and card message.
   // To add and preview widgets, use the Card Builder: https://addons.gsuite.google.com/uikit/builder
   final static private List<GoogleAppsCardV1Widget> CONTACT_FORM_WIDGETS = List.of(
-    new GoogleAppsCardV1Widget().setTextInput(new GoogleAppsCardV1TextInput()
+     GoogleAppsCardV1Widget().setTextInput( GoogleAppsCardV1TextInput()
       .setName("contactName")
       .setLabel("First and last name")
       .setType("SINGLE_LINE")),
-    new GoogleAppsCardV1Widget().setDateTimePicker(new GoogleAppsCardV1DateTimePicker()
-      .setName("contactBirthdate")
-      .setLabel("Birthdate")
+    GoogleAppsCardV1Widget().setDateTimePicker(GoogleAppsCardV1DateTimePicker()
+      .setName("contact")
+      .setLabel
       .setType("DATE_ONLY")),
-    new GoogleAppsCardV1Widget().setSelectionInput(new GoogleAppsCardV1SelectionInput()
+    GoogleAppsCardV1Widget().setSelectionInput(GoogleAppsCardV1SelectionInput()
       .setName("contactType")
       .setLabel("Contact type")
       .setType("RADIO_BUTTON")
       .setItems(List.of(
-        new GoogleAppsCardV1SelectionItem()
+        GoogleAppsCardV1SelectionItem()
           .setText("Work")
           .setValue("Work")
           .setSelected(false),
-        new GoogleAppsCardV1SelectionItem()
+        GoogleAppsCardV1SelectionItem()
           .setText("Personal")
           .setValue("Personal")
-          .setSelected(false)))));
+          .setSelected)))));
           // [END input_widgets]
 }
